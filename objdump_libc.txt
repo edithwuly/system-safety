@@ -1,0 +1,24 @@
+   7b4ce:	75 30                	jne    7b500 <tmpfile@@GLIBC_2.2.5+0xb0>
+   7b4d0:	31 c9                	xor    %ecx,%ecx
+   7b4d2:	31 d2                	xor    %edx,%edx
+   7b4d4:	31 f6                	xor    %esi,%esi
+   7b4d6:	48 89 ef             	mov    %rbp,%rdi
+   7b4d9:	e8 e2 03 00 00       	callq  7b8c0 <tempnam@@GLIBC_2.2.5+0x2c0>
+   7b4de:	85 c0                	test   %eax,%eax
+   7b4e0:	89 c3                	mov    %eax,%ebx
+   7b4e2:	78 1c                	js     7b500 <tmpfile@@GLIBC_2.2.5+0xb0>
+   7b4e4:	48 89 ef             	mov    %rbp,%rdi
+   7b4e7:	e8 54 68 09 00       	callq  111d40 <unlink@@GLIBC_2.2.5>
+--
+   7bce2:	0f 94 c0             	sete   %al
+   7bce5:	48 83 c4 18          	add    $0x18,%rsp
+--
+   7bcef:	90                   	nop
+
+000000000007bcf0 <remove@@GLIBC_2.2.5>:
+   7bcf0:	53                   	push   %rbx
+   7bcf1:	48 89 fb             	mov    %rdi,%rbx
+   7bcf4:	e8 47 60 09 00       	callq  111d40 <unlink@@GLIBC_2.2.5>
+--
+  111d22:	c3                   	retq   
+  111d23:	48 8b 0d 3e 91 2d 00 	mov    0x2d913e(%rip),%rcx        # 3eae68 <h_errlist@@GLIBC_2.2.5+0xdc8>

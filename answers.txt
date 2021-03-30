@@ -1,5 +1,12 @@
 ## Place your answers here.
 
+
+## Exercide 1
+1. In the function http_request_headers in http.c, there are two variables on the stack: envvar and value, which is used to store header, and the function will not exam whether the length of the header is exceed the size of value. If the attack send the head that is longer than 512, it will cause buffer overflow.
+2. The structure of the input: GET / HTTP/1.0\r\n Cookie: (rubbish to cover the address between value and return address)(the address we want the web server to return)\r\n
+3. Call stack: process_client -> http_request_headers
+
+
 ## Exercise 4 (challenge)
 1. Idea: Search the existing unlink() in libc to find an instruction that changes %rdi.
 2. objdump -d /lib/x86_64-linux-gnu/libc.so.6 | grep unlink -B10 | grep rdi -C4 > objdump_libc.txt
