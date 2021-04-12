@@ -1,1 +1,29 @@
 ## Place your answers here.
+
+
+## Exercide 1
+1. In the function http_request_headers in http.c, there are two variables on the stack: envvar and value, which is used to store header, and the function will not exam whether the length of the header is exceed the size of value. If the attack send the head that is longer than 512, it will cause buffer overflow.
+2. The structure of the input: GET / HTTP/1.0\r\n Cookie: (rubbish to cover the address between value and return address)(the address we want the web server to return)\r\n
+3. Call stack: process_client -> http_request_headers
+
+
+## Exercise 4 (challenge)
+1. Idea: Search the existing unlink() in libc to find an instruction that changes %rdi.
+2. objdump -d /lib/x86_64-linux-gnu/libc.so.6 | grep unlink -B10 | grep rdi -C4 > objdump_libc.txt
+3. The libc instruction at 7b4e4 (mov %rbp, %rdi) can be used.
+4. ROP gadget: Replace the %rbp here(8 bytes below return addr) with filename_addr
+ and put the libc_addr at the %rbp+8(the point that the buffer overflows) to call the instruction, finally it will call unlink.
+  
+
+## Exercise 5
+Vulnerability 1: zookd.c: process_client() with reqpath[4096] whose length is smaller than the static env[8192]. 
+It allows buffer overflow attack, attackers can write something overflows the return address on the stack, using ROP gadgets. 
+Attackers can smash the stack to execute syscalls in the library and functions in the zookd.c & http.c like accidentally(). 
+Fix: modify the size of reqpath to 8192
+
+Vulnerability 2: http.c: http_request_headers() with value[512] smaller than buf, and the function url_decode(value, sp) will cause the buffer overflows
+Fix: modify the size of value to 8192
+
+Vulnerability 3: http.c(165): sprintf(envvar, "HTTP_%s", buf) with envvar[512] smaller than buf[8192].
+Although buf is static and not on the stack, buffer overflows can happen after sprintf().
+Fix: Replace sprintf() in http.c with snprintf(envvar, 512, "HTTP_%s", buf), which will restrict the length of buffer that can be written.
