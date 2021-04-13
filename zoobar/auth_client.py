@@ -22,6 +22,15 @@ def register(username, password):
     pdb.add(newperson)
     pdb.commit()
 
+    bdb = bank_setup()
+    bank = bdb.query(Bank).get(username)
+    if bank:
+        return None
+    newbank = Bank()
+    newbank.username = username
+    bdb.add(newbank)
+    bdb.commit()
+
     host = readconf.read_conf().lookup_host('auth')
     with rpclib.client_connect(host) as c:
         return c.call('register', username = username, password = password)

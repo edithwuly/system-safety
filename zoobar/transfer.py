@@ -5,6 +5,9 @@ from zoodb import *
 from debug import *
 import bank
 import traceback
+import rpclib
+import readconf
+import bank_client
 
 @catch_err
 @requirelogin
@@ -13,8 +16,7 @@ def transfer():
     try:
         if 'recipient' in request.form:
             zoobars = eval(request.form['zoobars'])
-            bank.transfer(g.user.person.username,
-                          request.form['recipient'], zoobars)
+            bank_client.transfer(g.user.person.username, request.form['recipient'], zoobars, g.user.token) 
             warning = "Sent %d zoobars" % zoobars
     except (KeyError, ValueError, AttributeError) as e:
         traceback.print_exc()

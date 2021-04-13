@@ -31,6 +31,7 @@ def register(username, password):
     newcred.salt = salt
     cdb.add(newcred)
     cdb.commit()
+
     return newtoken(cdb, newcred)
 
 def check_token(username, token):

@@ -4,7 +4,7 @@ from debug import *
 from zoodb import *
 
 import auth_client
-import bank_client
+import bank
 import random
 import readconf
 import rpclib
@@ -12,6 +12,7 @@ import rpclib
 class User(object):
     def __init__(self):
         self.person = None
+        self.zoobars = None
 
     def checkLogin(self, username, password):
         token = auth_client.login(username, password)
@@ -29,7 +30,6 @@ class User(object):
 
     def addRegistration(self, username, password):
         token = auth_client.register(username, password)
-        bank_client.init(username)
         if token is not None:
             return self.loginCookie(username, token)
         else:
@@ -40,14 +40,18 @@ class User(object):
             return
         (username, token) = cookie.rsplit("#", 1)
         if auth_client.check_token(username, token):
-            self.setPerson(username, token)
+            host = readconf.read_conf().lookup_host('bank')
+            with rpclib.client_connect(host) as c:
+                zoobars = c.call('balance', username = username)
+                if zoobars is not None:
+                    self.setPerson(username, token, zoobars)
 
-    def setPerson(self, username, token):
+    def setPerson(self, username, token, zoobars):
         persondb = person_setup()
         bankdb = bank_setup()
         self.person = persondb.query(Person).get(username)
         self.token = token
-        self.zoobars = bank_client.balance(username)
+        self.zoobars = zoobars
 
 def logged_in():
     g.user = User()
