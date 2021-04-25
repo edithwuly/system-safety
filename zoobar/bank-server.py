@@ -6,6 +6,7 @@ import rpclib
 import sys
 import bank
 from debug import *
+import auth_client
 
 class BankRpcServer(rpclib.RpcServer):
     ## Fill in RPC methods here.
@@ -14,6 +15,8 @@ class BankRpcServer(rpclib.RpcServer):
         return bank.init(username)
 
     def rpc_transfer(self, sender, recipient, zoobars, token):
+        if not auth_client.check_token(sender, token) and self.caller != 'profile':
+            raise PermissError()
         return bank.transfer(sender, recipient, zoobars, token)
 
     def rpc_balance(self, username):
