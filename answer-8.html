@@ -4,6 +4,10 @@
 	<input type="submit" name="submission" value="Send">
 </form>
 
+<!--
+	After the form is submit, the load function of iframe "_blank" is triggered, which will transfer the location to attacker's page. Becase the attacker's page is marked in the attribution "src" of iframe "_blank", the resource from the attribution "src" is not constrained by Same Origin Policy.
+-->
+
 <iframe id="_blank" name="_blank" src="https://css.csail.mit.edu/6.858/2020/" style="display:none"></iframe>
 
 <script type="text/javascript">
